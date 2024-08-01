@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import '@testing-library/jest-dom';
 
 import App from "../App";
+import userEvent from "@testing-library/user-event";
 
 // Portfolio Elements
 test("displays a top-level heading with the text `Hi, I'm _______`", () => {
@@ -66,26 +67,86 @@ test("displays the correct links", () => {
 
 // Newsletter Form - Initial State
 test("the form includes text inputs for name and email address", () => {
-  // your test code here
+  render(<App />)
+
+  const addNameInput = screen.getByLabelText(/name/i)
+  expect(addNameInput).toBeInTheDocument()
+
+  const addEmailInput = screen.getByLabelText(/email/i)
+  expect(addEmailInput).toBeInTheDocument()
 });
 
 test("the form includes three checkboxes to select areas of interest", () => {
-  // your test code here
+  render(<App />)
+
+  const interestCheckbox1 = screen.getByRole('checkbox', {name: /Magic: The Gathering TCG/i})
+  expect(interestCheckbox1).toBeInTheDocument()
+
+  const interestCheckbox2 = screen.getByRole('checkbox', {name: /PokeMon TCG/i})
+  expect(interestCheckbox2).toBeInTheDocument()
+
+  const interestCheckbox3 = screen.getByRole('checkbox', {name: /Lorcana TCG/i})
+  expect(interestCheckbox3).toBeInTheDocument()
 });
 
 test("the checkboxes are initially unchecked", () => {
-  // your test code here
+  render(<App />)
+
+  const interestCheckbox1 = screen.getByRole('checkbox', {name: /Magic: The Gathering TCG/i})
+  expect(interestCheckbox1).not.toBeChecked()
+
+  const interestCheckbox2 = screen.getByRole('checkbox', {name: /Pokemon TCG/i})
+  expect(interestCheckbox2).not.toBeChecked()
+
+  const interestCheckbox3 = screen.getByRole('checkbox', {name: /Lorcana TCG/i})
+  expect(interestCheckbox3).not.toBeChecked()
 });
 
 // Newsletter Form - Adding Responses
 test("the page shows information the user types into the name and email address form fields", () => {
-  // your test code here
+  render(<App />)
+
+  const addNameInput = screen.getByLabelText(/name/i)
+  userEvent.type(addNameInput, "Grey")
+  expect(addNameInput).toHaveValue("Grey")
+
+  const addEmailInput = screen.getByLabelText(/email/i)
+  userEvent.type(addEmailInput, "Grey@test.com")
+  expect(addEmailInput).toHaveValue("Grey@test.com")
 });
 
 test("checked status of checkboxes changes when user clicks them", () => {
-  // your test code here
+  render(<App />)
+
+  const interestCheckbox1 = screen.getByRole('checkbox', {name: /Magic: The Gathering TCG/i})
+  userEvent.click(interestCheckbox1)
+  expect(interestCheckbox1).toBeChecked()
+
+  const interestCheckbox2 = screen.getByRole('checkbox', {name: /Pokemon TCG/i})
+  userEvent.click(interestCheckbox2)
+  expect(interestCheckbox2).toBeChecked()
+
+  const interestCheckbox3 = screen.getByRole('checkbox', {name: /Lorcana TCG/i})
+  userEvent.click(interestCheckbox3)
+  expect(interestCheckbox3).toBeChecked()
 });
 
 test("a message is displayed when the user clicks the Submit button", () => {
-  // your test code here
+  render(<App />)
+
+  const addNameInput = screen.getByLabelText(/name/i)
+  userEvent.type(addNameInput, "Grey")
+  expect(addNameInput).toHaveValue("Grey")
+  
+  const addEmailInput = screen.getByLabelText(/email/i)
+  userEvent.type(addEmailInput, "Grey@test.com")
+  expect(addEmailInput).toHaveValue("Grey@test.com")
+
+  const interestCheckbox1 = screen.getByRole('checkbox', {name: /Magic: The Gathering TCG/i})
+  userEvent.click(interestCheckbox1)
+  expect(interestCheckbox1).toBeChecked()
+
+  const formSubmit = screen.getByRole('button', {name: /submit/i})
+  userEvent.click(formSubmit)
+  expect(screen.getByText(/thanks for/i)).toBeInTheDocument()
 });
